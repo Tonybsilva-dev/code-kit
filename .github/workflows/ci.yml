@@ -65,5 +65,11 @@ jobs:
           cache: npm
       - name: Install deps
         run: npm ci
-      - name: Run tests
-        run: npm run test
+      - name: Run tests with coverage
+        run: npm run coverage
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v4
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+          files: ./coverage/lcov.info
+          fail_ci_if_error: true
