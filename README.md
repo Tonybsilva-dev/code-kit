@@ -89,6 +89,23 @@ Fluxo do `init`:
 - Tipo de projeto: Node / React / Next.js
 - Injeção de scripts no `package.json` (lint, format, test, test:e2e, qa)
 
+### Gerar arquivos de config automaticamente (`apply`)
+
+O comando abaixo gera `eslint.config.js`, `prettier.config.js` e `tsconfig.json` conforme suas seleções, sem instalar dependências:
+
+```bash
+npx code-kit apply
+```
+
+Exemplos de uso:
+
+- Projeto React com Tailwind:
+  - selecione: Linter = ESLint+Prettier, Projeto = React, Styling = Tailwind
+  - será gerado um `eslint.config.js` que compõe `base + react + tailwind`, um `prettier.config.js` e `tsconfig.json` base
+- Projeto Next.js sem Tailwind:
+  - selecione: Linter = ESLint+Prettier, Projeto = Next.js, Styling = (nenhum)
+  - será gerado um `eslint.config.js` que compõe `base + next`, além de `prettier.config.js` e `tsconfig.json`
+
 ## Scripts sugeridos
 
 - `lint`: ESLint (ou `biome check .` se Biome for escolhido)
