@@ -2,7 +2,7 @@
 import { Command } from 'commander';
 import prompts from 'prompts';
 import { spawn } from 'node:child_process';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 function detectPackageManager(cwd) {
@@ -78,6 +78,34 @@ function mapSelectionsToDeps(answers) {
   return Array.from(dev);
 }
 
+function injectScripts(cwd, answers) {
+  const pkgPath = join(cwd, 'package.json');
+  const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
+  pkg.scripts ||= {};
+  // Base
+  pkg.scripts.lint ||= answers.linter === 'biome' ? 'biome check .' : 'eslint .';
+  pkg.scripts.format ||= answers.linter === 'biome' ? 'biome format --write .' : 'prettier --write .';
+  // Unit
+  if (answers.unit?.includes('vitest')) {
+    pkg.scripts.test ||= 'vitest run';
+    pkg.scripts['test:watch'] ||= 'vitest';
+  }
+  if (answers.unit?.includes('jest')) {
+    pkg.scripts.test ||= 'jest';
+  }
+  // E2E
+  if (answers.e2e?.includes('playwright')) {
+    pkg.scripts['test:e2e'] ||= 'playwright test';
+  }
+  if (answers.e2e?.includes('cypress')) {
+    pkg.scripts['test:e2e'] ||= 'cypress run';
+  }
+  // QA agregador
+  pkg.scripts.qa ||= 'npm run lint && npm run type-check && npm run test';
+  writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
+  console.log('Scripts adicionados ao package.json');
+}
+
 const program = new Command();
 program
   .name('code-kit')
@@ -132,6 +160,7 @@ program
       await installDevDependencies(pm, devDeps);
     }
 
+    injectScripts(process.cwd(), answers);
     console.log('Setup interativo concluído.');
   });
 
