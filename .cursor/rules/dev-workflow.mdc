@@ -1,0 +1,124 @@
+---
+description: Diretrizes a serem seguidas para todas as seções de desenvolvimento
+globs:
+alwaysApply: true
+---
+
+## Diretrizes de desenvolvimento
+
+- **Contexto de Tarefas (Taskmaster MCP/CLI)**
+  - Sempre que houver uma tarefa, utilize o contexto de tarefas via MCP (preferido) ou CLI.
+  - Inicie listando e entendendo o próximo item: `list`, `next`, `show <id>`.
+  - Para tarefas complexas, use `expand`/`expand-all` e `analyze-complexity` antes de implementar.
+  - Para tarefas complexas, pergunte ou sugira melhorias antes de iniciar o desenvolvimento que sejam amplamente utilizadas no mercado visando sempre o mercado norte-americano.
+  - Referências: [dev_workflow.mdc](mdc:.cursor/rules/taskmaster/dev_workflow.mdc), [taskmaster.mdc](mdc:.cursor/rules/taskmaster/taskmaster.mdc).
+
+- **Baseline de Qualidade obrigatória**
+  - Execute `npm run qa` antes de começar qualquer implementação e ANTES de cada commit.
+  - O comando roda lint, type-check e testes. Corrija problemas antes de seguir.
+  - Exemplos de comando:
+
+    ```bash
+    npm run qa
+    ```
+
+- **Gestão de TODOs (obrigatório)**
+  - Crie uma lista de TODOs no início do trabalho, com itens atômicos, verb-led, curtos.
+  - Mantenha os TODOs sincronizados: marque `in_progress`, `completed`, `cancelled` conforme avança.
+  - Use o MCP quando aplicável para registrar progresso em subtarefas: `update-subtask`, `set-status`.
+
+- **Commits disciplinados**
+  - Faça commit somente após um ciclo de `npm run qa` bem-sucedido.
+  - Mensagens de commit: claras, curtas e descritivas do impacto.
+  - Quando baseado em tarefa/subtarefa, referencie o ID na mensagem.
+  - Exemplo:
+
+    ```bash
+    git add . && git commit -m "docs(rules): melhora dev-workflow (ref task: documentação)"
+    ```
+
+- **Log de desenvolvimento**
+  - Após cada entrega, crie um arquivo em `dev-logs/` com data e resumo das mudanças.
+  - Estrutura sugerida: título, contexto, mudanças, impacto, próximos passos.
+  - Exemplo de nome: `dev-logs/2025-09-25-dev-workflow.md`.
+
+- **Quando NÃO houver tarefa**
+  - Colete detalhes mínimos (escopo, impacto, arquivos) antes de iniciar.
+  - Crie TODOs e siga o mesmo ciclo de qualidade, commit e logging.
+
+- **Padrões de Regra (consistência entre arquivos)**
+  - Siga o formato de regras definido em [cursor_rules.mdc](mdc:.cursor/rules/cursor_rules.mdc):
+    - Cabeçalho com `description`, `globs`, `alwaysApply`.
+    - Seções com visão geral, requisitos acionáveis, exemplos, referências.
+    - Use bullets; destaque os pontos principais em negrito.
+    - Referencie arquivos reais via `mdc:` (ex.: [schema.prisma](mdc:prisma/schema.prisma)).
+
+- **Exemplos práticos (DO / DON'T)**
+  - DO: Rodar QA antes e depois de alterações
+
+    ```bash
+    npm run qa
+    ```
+
+  - DO: Registrar progresso em subtarefas
+
+    ```bash
+    # Ex.: marcar subtask como in-progress
+    # (via MCP) set-status --id=5.2 --status=in-progress
+    ```
+
+  - DON'T: Comitar com lint quebrado ou testes falhando
+
+    ```bash
+    # Evite commits sem rodar QA
+    git commit -m "wip: alterações"  # ❌
+    ```
+
+- **Integrações e Referências úteis**
+  - API/Validações: [api-errors.ts](mdc:src/lib/validation/api-errors.ts), [nps-schemas.ts](mdc:src/lib/validation/nps-schemas.ts)
+  - Prisma/DB: [schema.prisma](mdc:prisma/schema.prisma)
+  - Frontend: [page.tsx](mdc:src/app/page.tsx), [nps-survey.tsx](mdc:src/components/nps-survey.tsx)
+  - PRD do projeto: [novo-atacarejo-help-center-prd.md](mdc:docs/novo-atacarejo-help-center-prd.md)
+
+- **Manutenção Contínua das Regras**
+  - Atualize este arquivo quando surgirem padrões recorrentes, novas bibliotecas ou melhores práticas.
+  - Inclua exemplos reais do código e remova trechos desatualizados.
+  - Cruze referências entre regras relacionadas para manter DRY.
+
+- **Qualidade do Conteúdo**
+  - Regras devem ser específicas e acionáveis.
+  - Prefira exemplos reais do código às descrições genéricas.
+  - Mantenha consistência de formatação e linguagem.
+
+- **Checklist rápido por ciclo**
+  - [ ] Rodar `npm run qa` (baseline)
+  - [ ] Criar/atualizar TODOs
+  - [ ] Implementar seguindo padrões do projeto
+  - [ ] Rodar `npm run qa` (pré-commit)
+  - [ ] Commitar com mensagem clara (referenciar tarefa quando houver)
+  - [ ] Criar log em `dev-logs/` com resumo do impacto
+
+- **Checklists por área**
+  - API (Next.js Route Handlers)
+    - [ ] Validar entrada com schemas: [nps-schemas.ts](mdc:src/lib/validation/nps-schemas.ts)
+    - [ ] Mapear erros com util: [api-errors.ts](mdc:src/lib/validation/api-errors.ts)
+    - [ ] Cobertura de integração: [route.integration.test.ts](mdc:src/app/api/nps/__tests__/route.integration.test.ts)
+    - [ ] Usar `Response.json`/`NextResponse` consistente e status adequados
+    - [ ] Evitar vazar detalhes sensíveis em produção
+    - [ ] Garantir idempotência onde aplicável
+
+  - Prisma/DB
+    - [ ] Usar cliente centralizado: [prisma.ts](mdc:src/lib/prisma.ts)
+    - [ ] Modelos atualizados: [schema.prisma](mdc:prisma/schema.prisma)
+    - [ ] Tratar códigos Prisma (P2002, P2025, etc.) com [api-errors.ts](mdc:src/lib/validation/api-errors.ts)
+    - [ ] Adicionar migrações versionadas em `prisma/migrations/`
+    - [ ] Selecionar campos mínimos necessários (performance)
+    - [ ] Testes que cubram cenários de erro simulando Prisma
+
+  - UI/UX (React/Next.js)
+    - [ ] Componentes exportados de `index.ts`: [components/index.ts](mdc:src/components/index.ts)
+    - [ ] Acessibilidade básica (aria, foco, `Dialog` com `Description`)
+    - [ ] Testes de UI (Vitest/RTL) para estados principais
+    - [ ] Imagens via `next/image` e qualidades configuradas
+    - [ ] Respeitar design system (UI: button/card/dialog/progress)
+    - [ ] Evitar `any`; usar tipos de [types/](mdc:src/types/index.ts)

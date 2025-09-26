@@ -1,0 +1,173 @@
+{
+	"meta": {
+		"generatedAt": "2025-09-26T19:05:05.856Z",
+		"tasksAnalyzed": 20,
+		"totalTasks": 20,
+		"analysisCount": 20,
+		"thresholdScore": 5,
+		"projectName": "Taskmaster",
+		"usedResearch": false
+	},
+	"complexityAnalysis": [
+		{
+			"taskId": 1,
+			"taskTitle": "Initialize Project Structure and Package Configuration",
+			"complexityScore": 2,
+			"recommendedSubtasks": 2,
+			"expansionPrompt": "Break this task into two subtasks: 1. Create the required directory structure (`/eslint`, `/prettier`, etc.). 2. Update the root `package.json` with the specified name, public access, version, and `bin` entry.",
+			"reasoning": "Based on the codebase analysis, the project is empty. This task involves basic file system operations (creating directories) and editing a single JSON file. It is a low-complexity, foundational setup task with no logical dependencies or algorithms."
+		},
+		{
+			"taskId": 2,
+			"taskTitle": "Create Base ESLint Flat Config",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Expand this task into subtasks for: 1. Installing ESLint and required plugin dependencies. 2. Creating the `eslint/base.js` file with the basic Flat Config structure, including `@typescript-eslint/parser`. 3. Adding and configuring rules for `eslint-plugin-import`, `eslint-plugin-promise`, `eslint-plugin-n`, and core rules like `no-console` and `eqeqeq`.",
+			"reasoning": "This is a greenfield task. The complexity comes from working with ESLint's newer Flat Config format and ensuring multiple plugins (`@typescript-eslint/parser`, `import`, `promise`, `n`) are configured correctly to work together without conflicts. This requires more than just copying a boilerplate."
+		},
+		{
+			"taskId": 3,
+			"taskTitle": "Create React ESLint Config",
+			"complexityScore": 3,
+			"recommendedSubtasks": 2,
+			"expansionPrompt": "Break this task into two subtasks: 1. Create `eslint/react.js`, import and extend the `base` config. 2. Add and configure `eslint-plugin-react`, `eslint-plugin-jsx-a11y`, and `eslint-plugin-react-hooks` with their recommended settings.",
+			"reasoning": "This task is less complex as it primarily extends the `eslint/base.js` config. The work involves adding and configuring a few well-known, mature plugins. The complexity is in the setup, not in novel rule creation."
+		},
+		{
+			"taskId": 4,
+			"taskTitle": "Create Next.js ESLint Config",
+			"complexityScore": 2,
+			"recommendedSubtasks": 1,
+			"expansionPrompt": "Create a single subtask to implement the `eslint/next.js` config. This subtask should extend the `eslint/react.js` config and integrate the recommended rules from `eslint-plugin-next`.",
+			"reasoning": "This is a low-complexity task. It's a simple extension of the `eslint/react.js` config and primarily involves adding a single, well-documented plugin (`eslint-plugin-next`) that provides a straightforward recommended configuration."
+		},
+		{
+			"taskId": 5,
+			"taskTitle": "Create Tailwind CSS ESLint Config",
+			"complexityScore": 3,
+			"recommendedSubtasks": 1,
+			"expansionPrompt": "Create a single subtask to implement the `eslint/tailwind.js` config. This subtask should add and configure `eslint-plugin-tailwindcss` to enforce classname sorting and other best practices.",
+			"reasoning": "This is a self-contained, greenfield task. It involves configuring a single plugin with well-defined options. It's designed to be composable, so it has minimal dependencies on the structure of other ESLint configs, making it straightforward."
+		},
+		{
+			"taskId": 6,
+			"taskTitle": "Create Base Prettier Config",
+			"complexityScore": 4,
+			"recommendedSubtasks": 2,
+			"expansionPrompt": "Break this task into two subtasks: 1. Create the `prettier/base.js` file with the specified formatting rules. 2. Update the base ESLint configuration (`eslint/base.js`) to include `eslint-config-prettier` to disable conflicting style rules.",
+			"reasoning": "Creating the Prettier config itself is simple (complexity 1). The higher complexity score comes from the second part: integrating it with ESLint. This requires modifying the ESLint configuration to add `eslint-config-prettier` correctly, ensuring it disables conflicting rules from other plugins."
+		},
+		{
+			"taskId": 7,
+			"taskTitle": "Integrate Prettier Tailwind CSS Plugin",
+			"complexityScore": 2,
+			"recommendedSubtasks": 1,
+			"expansionPrompt": "Create a single subtask to update the `prettier/base.js` configuration. This subtask should add `prettier-plugin-tailwindcss` to the dependencies and the `plugins` array.",
+			"reasoning": "This is a very low-complexity task. It requires installing one dependency and adding a single line to the existing Prettier configuration file. The plugin handles the class sorting logic automatically."
+		},
+		{
+			"taskId": 8,
+			"taskTitle": "Create Base Biome Config",
+			"complexityScore": 3,
+			"recommendedSubtasks": 2,
+			"expansionPrompt": "Break this task into two subtasks: 1. Configure the `formatter` section in `biome/config.json` to match the project's style guide (single quotes, etc.). 2. Configure the `linter` section, enabling the recommended rule sets (`correctness`, `suspicious`, `style`).",
+			"reasoning": "This is a greenfield configuration. Biome's configuration is a single JSON file and is generally less complex than ESLint. The task is straightforward, involving setting known properties for the formatter and linter as per the documentation."
+		},
+		{
+			"taskId": 9,
+			"taskTitle": "Create Base TypeScript Config",
+			"complexityScore": 3,
+			"recommendedSubtasks": 2,
+			"expansionPrompt": "Break this task into two subtasks: 1. Create `typescript/base.json` and set the core `compilerOptions` like `strict: true` and `moduleResolution: 'bundler'`. 2. Add the `paths` configuration for the `@/*` alias.",
+			"reasoning": "This is a standard greenfield configuration task. Creating a `tsconfig.json` with modern, strict settings is well-understood. The complexity is low as it involves populating a JSON file with documented options."
+		},
+		{
+			"taskId": 10,
+			"taskTitle": "Create React TypeScript Config",
+			"complexityScore": 2,
+			"recommendedSubtasks": 1,
+			"expansionPrompt": "Create a single subtask to implement the `typescript/react.json` config. This subtask should extend `typescript/base.json` and add the `\"jsx\": \"react-jsx\"` compiler option.",
+			"reasoning": "This is a minimal task that involves creating a new JSON file that extends the base `tsconfig` and adds a single, well-known compiler option for JSX. The complexity is very low."
+		},
+		{
+			"taskId": 11,
+			"taskTitle": "Create Base Stylelint Config",
+			"complexityScore": 4,
+			"recommendedSubtasks": 2,
+			"expansionPrompt": "Break this task into two subtasks: 1. Create `stylelint/base.js` with base rules, including blocking `!important`. 2. Integrate and configure `stylelint-order` with a logical property ordering.",
+			"reasoning": "This is a greenfield configuration. The complexity is moderate because `stylelint-order` requires a detailed and sometimes verbose configuration for property groups and order, which is more involved than setting simple rules."
+		},
+		{
+			"taskId": 12,
+			"taskTitle": "Create Styled Components Stylelint Config",
+			"complexityScore": 4,
+			"recommendedSubtasks": 2,
+			"expansionPrompt": "Break this task into two subtasks: 1. Create `stylelint/styled.js`, extending the base config. 2. Add and configure the necessary processor/syntax (e.g., `stylelint-processor-styled-components`) to enable linting within tagged template literals.",
+			"reasoning": "The complexity here lies in configuring Stylelint to parse CSS within JavaScript files. This requires integrating a custom processor or syntax, which is a non-trivial step that often requires troubleshooting to get right."
+		},
+		{
+			"taskId": 13,
+			"taskTitle": "Create Vitest Config",
+			"complexityScore": 3,
+			"recommendedSubtasks": 2,
+			"expansionPrompt": "Break this task into two subtasks: 1. Create `tests/vitest.config.ts` with global settings, environment, and the `vite-tsconfig-paths` plugin. 2. Configure the `test.coverage` section with `text` and `html` reporters.",
+			"reasoning": "This is a straightforward greenfield configuration. Vitest's config file is well-documented. The task involves setting standard options and integrating a common plugin for path aliases, which is a low-complexity operation."
+		},
+		{
+			"taskId": 14,
+			"taskTitle": "Create Playwright Config",
+			"complexityScore": 2,
+			"recommendedSubtasks": 1,
+			"expansionPrompt": "Create a single subtask to implement the `tests/playwright.config.ts` file, defining the `testDir`, parallelism, reporters, and `use` options as specified.",
+			"reasoning": "This is a simple greenfield configuration task. The Playwright config file has a clear structure, and the required options are all standard, top-level properties that are easy to set."
+		},
+		{
+			"taskId": 15,
+			"taskTitle": "Implement CLI Scaffolding and Entry Point",
+			"complexityScore": 4,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Expand this task into subtasks for: 1. Creating the `cli.js` entry point and making it executable via the `bin` field in `package.json`. 2. Integrating an argument parsing library (e.g., `yargs`) to define the `init` command. 3. Adding a prompt library (e.g., `prompts`) and creating a basic placeholder for the `init` command.",
+			"reasoning": "This is the first greenfield task for the CLI logic. It's more than a config file; it involves setting up the executable, handling command-line arguments, and integrating external libraries for I/O. The complexity lies in structuring this foundation correctly."
+		},
+		{
+			"taskId": 16,
+			"taskTitle": "Implement CLI Interactive Selection Flow",
+			"complexityScore": 6,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break this task into a series of subtasks, one for each interactive prompt: 1. Implement the Linter/Formatter selection prompt (ESLint+Prettier vs. Biome). 2. Implement the Project Type prompt (Next.js, React, Node). 3. Implement the Styling prompt (Stylelint, Tailwind). 4. Implement the Testing prompts (Vitest, Playwright).",
+			"reasoning": "This task is logically complex. It requires building a user-facing questionnaire, managing the state of the user's answers, and potentially handling conditional logic between questions. It's the core of the CLI's interaction model."
+		},
+		{
+			"taskId": 17,
+			"taskTitle": "Implement CLI Dependency Installation Logic",
+			"complexityScore": 5,
+			"recommendedSubtasks": 3,
+			"expansionPrompt": "Expand this task into three subtasks: 1. Implement a function to detect the user's package manager (npm, yarn, pnpm). 2. Create a mapping structure that translates user choices from the prompts into lists of dev dependency packages. 3. Implement the function that constructs and executes the installation command as a child process, with appropriate user feedback.",
+			"reasoning": "This task involves several distinct logical components: environment detection (package manager), data mapping (choices to packages), and system interaction (spawning a child process). Each part requires careful implementation and error handling."
+		},
+		{
+			"taskId": 18,
+			"taskTitle": "Implement CLI File Generation Logic",
+			"complexityScore": 7,
+			"recommendedSubtasks": 4,
+			"expansionPrompt": "Break this task down by the type of file being generated: 1. Implement a core file-generation utility that can copy template files from the package to the user's project. 2. Implement the logic to dynamically generate `eslint.config.js` based on user choices (e.g., composing base, react, tailwind configs). 3. Implement the logic to generate the root `tsconfig.json` that extends the appropriate base config(s). 4. Implement the logic for generating other config files like `.prettierrc` or `biome.json`.",
+			"reasoning": "This is one of the most complex CLI tasks. It's not just copying files; it requires dynamically generating file content based on user input. For example, the `eslint.config.js` must be built with the correct imports and composition logic, which requires careful string manipulation and file I/O."
+		},
+		{
+			"taskId": 19,
+			"taskTitle": "Implement CLI `package.json` Script Injection",
+			"complexityScore": 5,
+			"recommendedSubtasks": 2,
+			"expansionPrompt": "Break this task into two subtasks: 1. Implement a function to safely read and parse the user's `package.json` file. 2. Implement the logic to merge the new scripts (based on user choices) into the existing `scripts` object and write the updated `package.json` back to disk.",
+			"reasoning": "The complexity is moderate due to the critical nature of the task. Modifying a user's `package.json` must be done safely to avoid destroying existing data. This requires careful reading, non-destructive merging of the `scripts` object, and properly formatted writing of the JSON file."
+		},
+		{
+			"taskId": 20,
+			"taskTitle": "Implement CLI User Feedback and Finalization",
+			"complexityScore": 3,
+			"recommendedSubtasks": 2,
+			"expansionPrompt": "Break this task into two subtasks: 1. Add and configure a CLI feedback library like `chalk` for colors and `ora` for spinners. 2. Go through the entire `init` command flow and add informative logging, progress indicators, and success/finalization messages.",
+			"reasoning": "While not logically complex, this task requires attention to detail to create a good user experience. It involves integrating UI/feedback libraries and placing logging statements throughout the existing CLI logic, which is more than a simple `console.log`."
+		}
+	]
+}
