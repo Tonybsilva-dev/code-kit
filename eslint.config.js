@@ -10,6 +10,7 @@ export default tseslint.config(
 	{
 		files: ['**/*.{ts,tsx,js}'],
 		rules: {
+			'semi': ['error', 'always']
 		},
 		languageOptions: {
 			globals: {
