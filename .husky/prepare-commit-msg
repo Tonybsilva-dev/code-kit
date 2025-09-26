@@ -1,0 +1,15 @@
+#!/usr/bin/env sh
+# Preenche a mensagem de commit a partir do template quando vazia
+# Uso: prepare-commit-msg <MSG_FILE> <COMMIT_SOURCE>
+MSG_FILE="$1"
+COMMIT_SOURCE="$2"
+
+# Evita sobrescrever mensagens geradas por ferramentas (merge, squash, etc.)
+if [ -n "$COMMIT_SOURCE" ]; then
+	exit 0
+fi
+
+# Só preenche se o arquivo estiver vazio e o template existir
+if [ -f .github/commit_message_template.md ] && [ ! -s "$MSG_FILE" ]; then
+	cp .github/commit_message_template.md "$MSG_FILE"
+fi
