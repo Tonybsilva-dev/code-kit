@@ -12,12 +12,67 @@ program
 	.command('init')
 	.description('Inicializa configuração básica do projeto')
 	.action(async () => {
-		const answers = await prompts([
-			{ name: 'usePrettier', type: 'toggle', message: 'Configurar Prettier?', initial: true, active: 'yes', inactive: 'no' },
-			{ name: 'useESLint', type: 'toggle', message: 'Configurar ESLint?', initial: true, active: 'yes', inactive: 'no' },
-		]);
-		console.log('Respostas:', answers);
-		console.log('Setup básico concluído.');
+		const questions = [
+			{
+				type: 'select',
+				name: 'linter',
+				message: 'Linter:',
+				choices: [
+					{ title: 'ESLint + Prettier', value: 'eslint-prettier' },
+					{ title: 'Biome', value: 'biome' },
+				],
+				initial: 0,
+			},
+			{
+				type: 'multiselect',
+				name: 'unit',
+				message: 'Testes unitários:',
+				choices: [
+					{ title: 'Vitest', value: 'vitest', selected: true },
+					{ title: 'Jest', value: 'jest' },
+				],
+				min: 1,
+			},
+			{
+				type: 'multiselect',
+				name: 'e2e',
+				message: 'E2E:',
+				choices: [
+					{ title: 'Playwright', value: 'playwright', selected: true },
+					{ title: 'Cypress', value: 'cypress' },
+				],
+			},
+			{
+				type: 'multiselect',
+				name: 'styling',
+				message: 'Styling:',
+				choices: [
+					{ title: 'Stylelint', value: 'stylelint', selected: true },
+					{ title: 'Tailwind', value: 'tailwind' },
+				],
+			},
+			{
+				type: 'select',
+				name: 'projectType',
+				message: 'Tipo de projeto:',
+				choices: [
+					{ title: 'Node', value: 'node' },
+					{ title: 'React', value: 'react' },
+					{ title: 'Next.js', value: 'next' },
+				],
+				initial: 0,
+			},
+		];
+
+		const answers = await prompts(questions, {
+			onCancel: () => {
+				console.log('Operação cancelada.');
+				process.exit(1);
+			},
+		});
+
+		console.log('Seleções:', answers);
+		console.log('Setup interativo concluído.');
 	});
 
 program.parseAsync(process.argv);
