@@ -47,37 +47,37 @@ Esse comando deverá abrir um fluxo interativo com as seguintes etapas:
 
 1. Seleção de Linters
 
- ESLint + Prettier (configuração padrão, modular e madura)
+ESLint + Prettier (configuração padrão, modular e madura)
 
- Biome (linter + formatador moderno e rápido)
+Biome (linter + formatador moderno e rápido)
 
 2. Seleção de Testes Automatizados
 
- Jest + Supertest (projetos legado / foco em APIs)
+Jest + Supertest (projetos legado / foco em APIs)
 
- Vitest (projetos modernos / integração com Vite e TS)
+Vitest (projetos modernos / integração com Vite e TS)
 
 3. Seleção de Testes E2E
 
- Playwright (padrão moderno, browsers oficiais)
+Playwright (padrão moderno, browsers oficiais)
 
- Cypress (alternativa popular, foco em legados)
+Cypress (alternativa popular, foco em legados)
 
 4. Estilos
 
- Stylelint Base (CSS/SCSS)
+Stylelint Base (CSS/SCSS)
 
- Stylelint Styled (Styled Components / CSS-in-JS)
+Stylelint Styled (Styled Components / CSS-in-JS)
 
- Tailwind CSS (ativar integração automática com ESLint + Prettier)
+Tailwind CSS (ativar integração automática com ESLint + Prettier)
 
 5. Extensões de Projeto
 
- Next.js (adiciona regras e configs específicas)
+Next.js (adiciona regras e configs específicas)
 
- React Puro
+React Puro
 
- Node.js / API
+Node.js / API
 
 # ⚡ Funcionalidade do CLI
 
@@ -150,8 +150,7 @@ O projeto **deverá ser estruturado** em módulos organizados por pasta:
   └─ playwright.config.ts
 ```
 
-Cada pasta conterá configurações exportáveis para uso em diferentes projetos
----
+## Cada pasta conterá configurações exportáveis para uso em diferentes projetos
 
 ## 📦 ESLint
 

@@ -22,18 +22,24 @@
     "@vitest/coverage-v8": "^3.2.4",
     "codecov": "^3.8.2",
     "eslint": "^9.36.0",
+    "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
     "eslint-plugin-n": "^17.23.1",
     "eslint-plugin-promise": "^7.2.1",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.1",
+    "prettier": "^3.6.2",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.44.1",
     "vitest": "^3.2.4"
   },
   "lint-staged": {
     "*": {
-      "{js,ts,jsx,tsx}": "eslint --fix"
+      "{js,ts,jsx,tsx}": "eslint --fix",
+      "\"js\"": "prettier --write && eslint --fix",
+      "\"ts\"": "prettier --write && eslint --fix",
+      "\"jsx\"": "prettier --write && eslint --fix",
+      "\"tsx\"": "prettier --write && eslint --fix"
     }
   },
   "bin": {
