@@ -57,16 +57,14 @@
     "code-kit": "src/bin/cli.js"
   },
   "type": "module",
-  "exports": [
-    {
-      "/eslint/base": "./src/eslint/base.js",
-      "/eslint/react": "./src/eslint/react.js",
-      "/eslint/next": "./src/eslint/next.js",
-      "/eslint/tailwind": "./src/eslint/tailwind.js",
-      "/prettier/base": "./src/prettier/base.js",
-      "/typescript/base": "./src/typescript/base.json",
-      "/biome/config": "./src/biome/config.json",
-      "/stylelint/base": "./src/style-lint/base.js"
-    }
-  ]
+  "exports": {
+    "./eslint/base": "./src/eslint/base.js",
+    "./eslint/react": "./src/eslint/react.js",
+    "./eslint/next": "./src/eslint/next.js",
+    "./eslint/tailwind": "./src/eslint/tailwind.js",
+    "./prettier/base": "./src/prettier/base.js",
+    "./typescript/base": "./src/typescript/base.json",
+    "./biome/config": "./src/biome/config.json",
+    "./stylelint/base": "./src/style-lint/base.js"
+  }
 }
