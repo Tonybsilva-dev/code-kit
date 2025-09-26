@@ -43,6 +43,9 @@ async function installDevDependencies(pm, devDeps) {
 
 function mapSelectionsToDeps(answers) {
   const dev = new Set();
+  // Sempre garantir TypeScript básico para tsc --noEmit (tsconfig gerado)
+  dev.add('typescript');
+  dev.add('@types/node');
   if (answers.linter === 'eslint-prettier') {
     dev.add('eslint');
     dev.add('prettier');
@@ -84,25 +87,42 @@ function injectScripts(cwd, answers) {
   const pkgPath = join(cwd, 'package.json');
   const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
   pkg.scripts ||= {};
-  // Base
-  pkg.scripts.lint ||= answers.linter === 'biome' ? 'biome check .' : 'eslint .';
-  pkg.scripts.format ||= answers.linter === 'biome' ? 'biome format --write .' : 'prettier --write .';
+  // Base lint/format e type-check
+  if (answers.linter === 'biome') {
+    pkg.scripts.lint ||= 'biome check .';
+    pkg.scripts['lint:fix'] ||= 'biome check --write .';
+    pkg.scripts.format ||= 'biome format --write .';
+    pkg.scripts['format:check'] ||= 'biome format --check .';
+  } else {
+    pkg.scripts.lint ||= 'eslint .';
+    pkg.scripts['lint:fix'] ||= 'eslint . --fix';
+    pkg.scripts.format ||= 'prettier --write .';
+    pkg.scripts['format:check'] ||= 'prettier --check .';
+  }
+  pkg.scripts['type-check'] ||= 'tsc --noEmit';
+
   // Unit
   if (answers.unit?.includes('vitest')) {
     pkg.scripts.test ||= 'vitest run';
     pkg.scripts['test:watch'] ||= 'vitest';
+    pkg.scripts.coverage ||= 'vitest run --coverage';
   }
   if (answers.unit?.includes('jest')) {
     pkg.scripts.test ||= 'jest';
+    pkg.scripts['test:watch'] ||= 'jest --watch';
   }
   // E2E
   if (answers.e2e?.includes('playwright')) {
     pkg.scripts['test:e2e'] ||= 'playwright test';
+    pkg.scripts['test:e2e:playwright'] ||= 'playwright test';
   }
   if (answers.e2e?.includes('cypress')) {
-    pkg.scripts['test:e2e'] ||= 'cypress run';
+    // Se já existir test:e2e (por Playwright), adiciona scripts específicos
+    if (!pkg.scripts['test:e2e']) pkg.scripts['test:e2e'] = 'cypress run';
+    pkg.scripts['test:e2e:cypress'] ||= 'cypress run';
+    pkg.scripts['test:e2e:cypress:open'] ||= 'cypress open';
   }
-  // QA agregador
+  // QA agregador (mantém simples e rápido)
   pkg.scripts.qa ||= 'npm run lint && npm run type-check && npm run test';
   writeFileSync(pkgPath, JSON.stringify(pkg, null, 2));
   console.log('Scripts adicionados ao package.json');
@@ -166,35 +186,57 @@ function writeStylelintConfig(cwd) {
 async function askSelections() {
   const questions = [
     {
-      type: 'select', name: 'linter', message: 'Linter:', choices: [
-        { title: 'ESLint + Prettier', value: 'eslint-prettier' },
-        { title: 'Biome', value: 'biome' },
-      ], initial: 0
+      type: 'select',
+      name: 'linter',
+      message: 'Escolha o linter/formattter principal (gera configs automaticamente):',
+      hint: 'ESLint + Prettier (Flat config) ou Biome (check/format).',
+      choices: [
+        { title: 'ESLint + Prettier (recomendado)', value: 'eslint-prettier' },
+        { title: 'Biome (alternativa tudo‑em‑um)', value: 'biome' },
+      ],
+      initial: 0
     },
     {
-      type: 'multiselect', name: 'unit', message: 'Testes unitários:', choices: [
-        { title: 'Vitest', value: 'vitest', selected: true },
+      type: 'multiselect',
+      name: 'unit',
+      message: 'Selecione framework(s) de testes unitários:',
+      hint: 'Vitest (leve e rápido) ou Jest (ecossistema amplo).',
+      choices: [
+        { title: 'Vitest (padrão)', value: 'vitest', selected: true },
         { title: 'Jest', value: 'jest' },
-      ], min: 1
+      ],
+      min: 1
     },
     {
-      type: 'multiselect', name: 'e2e', message: 'E2E:', choices: [
+      type: 'multiselect',
+      name: 'e2e',
+      message: 'Selecione ferramenta(s) de E2E:',
+      hint: 'Playwright (multi‑browser) e/ou Cypress.',
+      choices: [
         { title: 'Playwright', value: 'playwright', selected: true },
         { title: 'Cypress', value: 'cypress' },
       ]
     },
     {
-      type: 'multiselect', name: 'styling', message: 'Styling:', choices: [
+      type: 'multiselect',
+      name: 'styling',
+      message: 'Selecione opções de styling:',
+      hint: 'Gera configs para Stylelint e integra Tailwind na formatação.',
+      choices: [
         { title: 'Stylelint', value: 'stylelint', selected: true },
-        { title: 'Tailwind', value: 'tailwind' },
+        { title: 'Tailwind (ordenação via Prettier plugin)', value: 'tailwind' },
       ]
     },
     {
-      type: 'select', name: 'projectType', message: 'Tipo de projeto:', choices: [
+      type: 'select',
+      name: 'projectType',
+      message: 'Tipo de projeto (ajusta regras do ESLint quando aplicável):',
+      choices: [
         { title: 'Node', value: 'node' },
         { title: 'React', value: 'react' },
         { title: 'Next.js', value: 'next' },
-      ], initial: 0
+      ],
+      initial: 0
     },
   ];
   return prompts(questions, { onCancel: () => { console.log('Operação cancelada.'); process.exit(1); } });
@@ -219,7 +261,18 @@ program
       await installDevDependencies(pm, devDeps);
     }
     injectScripts(process.cwd(), answers);
-    console.log('Setup interativo concluído.');
+    // Gerar arquivos de configuração conforme seleções (mesmo comportamento do comando apply)
+    if (answers.linter === 'biome') {
+      writeBiomeConfig(process.cwd());
+    } else {
+      writeESLintConfig(process.cwd(), answers);
+      writePrettierConfig(process.cwd());
+    }
+    if (answers.styling?.includes('stylelint')) {
+      writeStylelintConfig(process.cwd());
+    }
+    writeTSConfig(process.cwd());
+    console.log('Setup interativo concluído (scripts + arquivos gerados).');
   });
 
 program
