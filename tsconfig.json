@@ -1,16 +1,7 @@
 {
+  "extends": "./src/typescript/base.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "moduleResolution": "Bundler",
-    "strict": true,
-    "declaration": true,
-    "emitDeclarationOnly": false,
-    "outDir": "dist",
-    "sourceMap": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "resolveJsonModule": true
+    "emitDeclarationOnly": false
   },
   "include": ["src", "tests"],
   "exclude": ["node_modules", "dist"]
