@@ -162,10 +162,14 @@ function writePrettierConfig(cwd) {
   console.log('Gerado: prettier.config.js');
 }
 
-function writeTSConfig(cwd) {
+function writeTSConfig(cwd, answers) {
+  const compilerOptions = { emitDeclarationOnly: false };
+  if (answers?.projectType === 'react' || answers?.projectType === 'next') {
+    compilerOptions.jsx = 'react-jsx';
+  }
   const content = JSON.stringify({
     extends: 'code-kit/typescript/base',
-    compilerOptions: { emitDeclarationOnly: false },
+    compilerOptions,
   }, null, 2) + '\n';
   writeFileSync(join(cwd, 'tsconfig.json'), content);
   console.log('Gerado: tsconfig.json');
@@ -271,7 +275,7 @@ program
     if (answers.styling?.includes('stylelint')) {
       writeStylelintConfig(process.cwd());
     }
-    writeTSConfig(process.cwd());
+    writeTSConfig(process.cwd(), answers);
     console.log('Setup interativo concluído (scripts + arquivos gerados).');
   });
 
@@ -289,7 +293,7 @@ program
     if (answers.styling?.includes('stylelint')) {
       writeStylelintConfig(process.cwd());
     }
-    writeTSConfig(process.cwd());
+    writeTSConfig(process.cwd(), answers);
     console.log('Arquivos gerados com sucesso.');
   });
 
