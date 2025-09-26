@@ -8,6 +8,7 @@
     "type-check": "tsc --noEmit",
     "coverage": "vitest run --coverage",
     "qa": "npm run lint && npm run type-check && npm run test",
+    "release": "semantic-release",
     "prepare": "husky"
   },
   "keywords": [],
@@ -16,6 +17,12 @@
   "description": "",
   "devDependencies": {
     "@eslint/js": "^9.36.0",
+    "@semantic-release/changelog": "^6.0.3",
+    "@semantic-release/commit-analyzer": "^13.0.1",
+    "@semantic-release/git": "^10.0.1",
+    "@semantic-release/github": "^10.3.5",
+    "@semantic-release/npm": "^11.0.3",
+    "@semantic-release/release-notes-generator": "^14.1.0",
     "@types/node": "^24.5.2",
     "@typescript-eslint/eslint-plugin": "^8.44.1",
     "@typescript-eslint/parser": "^8.44.1",
@@ -39,6 +46,7 @@
     "prettier-plugin-organize-imports": "^4.3.0",
     "prettier-plugin-tailwindcss": "^0.6.14",
     "prompts": "^2.4.2",
+    "semantic-release": "^24.2.9",
     "stylelint": "^16.24.0",
     "typescript": "^5.9.2",
     "typescript-eslint": "^8.44.1",
@@ -57,16 +65,26 @@
     "code-kit": "src/bin/cli.js"
   },
   "type": "module",
-  "exports": [
-    {
-      "/eslint/base": "./src/eslint/base.js",
-      "/eslint/react": "./src/eslint/react.js",
-      "/eslint/next": "./src/eslint/next.js",
-      "/eslint/tailwind": "./src/eslint/tailwind.js",
-      "/prettier/base": "./src/prettier/base.js",
-      "/typescript/base": "./src/typescript/base.json",
-      "/biome/config": "./src/biome/config.json",
-      "/stylelint/base": "./src/style-lint/base.js"
-    }
-  ]
+  "exports": {
+    ".": "./index.js",
+    "./eslint/base": "./src/eslint/base.js",
+    "./eslint/react": "./src/eslint/react.js",
+    "./eslint/next": "./src/eslint/next.js",
+    "./eslint/tailwind": "./src/eslint/tailwind.js",
+    "./prettier/base": "./src/prettier/base.js",
+    "./typescript/base": "./src/typescript/base.json",
+    "./biome/config": "./src/biome/config.json",
+    "./stylelint/base": "./src/style-lint/base.js"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Tonybsilva-dev/code-kit.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Tonybsilva-dev/code-kit/issues"
+  },
+  "homepage": "https://github.com/Tonybsilva-dev/code-kit#readme"
 }
