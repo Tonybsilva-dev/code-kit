@@ -1,11 +1,31 @@
 {
   "extends": "./src/typescript/base.json",
   "compilerOptions": {
-    "emitDeclarationOnly": false
+    "emitDeclarationOnly": false,
+    "allowJs": true,
+    "rootDir": ".",
+    "paths": {
+      "code-kit/eslint/*": [
+        "./src/eslint/*"
+      ],
+      "code-kit/prettier/*": [
+        "./src/prettier/*"
+      ],
+      "code-kit/typescript/*": [
+        "./src/typescript/*"
+      ],
+      "code-kit/biome/*": [
+        "./src/biome/*"
+      ],
+      "code-kit/stylelint/*": [
+        "./src/style-lint/*"
+      ]
+    }
   },
   "include": [
     "src",
-    "tests"
+    "tests",
+    "tests/types/**/*.d.ts"
   ],
   "exclude": [
     "node_modules",
