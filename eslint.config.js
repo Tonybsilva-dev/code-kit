@@ -8,8 +8,16 @@ export default tseslint.config(
 	js.configs.recommended,
 	...tseslint.configs.recommended,
 	{
-		files: ['**/*.ts', '**/*.tsx'],
+		files: ['**/*.{ts,tsx,js}'],
 		rules: {
+		},
+		languageOptions: {
+			globals: {
+				console: 'readonly',
+				process: 'readonly',
+				__dirname: 'readonly',
+				module: 'readonly'
+			}
 		}
 	}
 );

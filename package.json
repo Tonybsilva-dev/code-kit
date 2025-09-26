@@ -32,5 +32,8 @@
     "*": {
       "{js,ts,jsx,tsx}": "eslint --fix"
     }
+  },
+  "bin": {
+    "code-kit": "src/bin/cli.js"
   }
 }
