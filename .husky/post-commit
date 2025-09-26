@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+. "./_/husky.sh"
+
+scripts/generate-dev-log.sh || true
