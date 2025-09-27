@@ -132,18 +132,18 @@ function buildEslintConfigContent(answers) {
   if (answers.linter === 'biome') {
     return null;
   }
-  const imports = ["import base from 'code-kit/eslint/base.js';"];
+  const imports = ["import base from '@tonybsilva/code-kit/eslint/base.js';"];
   const spreads = ['...base'];
   if (answers.projectType === 'react') {
-    imports.push("import react from 'code-kit/eslint/react.js';");
+    imports.push("import react from '@tonybsilva/code-kit/eslint/react.js';");
     spreads.push('...react');
   }
   if (answers.projectType === 'next') {
-    imports.push("import next from 'code-kit/eslint/next.js';");
+    imports.push("import next from '@tonybsilva/code-kit/eslint/next.js';");
     spreads.push('...next');
   }
   if (answers.styling?.includes('tailwind')) {
-    imports.push("import tailwind from 'code-kit/eslint/tailwind.js';");
+    imports.push("import tailwind from '@tonybsilva/code-kit/eslint/tailwind.js';");
     spreads.push('...tailwind');
   }
   return `${imports.join('\n')}\n\nexport default [\n\t${spreads.join(',\n\t')}\n];\n`;
@@ -152,14 +152,14 @@ function buildEslintConfigContent(answers) {
 function writeESLintConfig(cwd, answers) {
   const content = buildEslintConfigContent(answers);
   if (!content) return;
-  writeFileSync(join(cwd, 'eslint.config.js'), content);
-  console.log('Gerado: eslint.config.js');
+  writeFileSync(join(cwd, 'eslint.config.mjs'), content);
+  console.log('Gerado: eslint.config.mjs');
 }
 
 function writePrettierConfig(cwd) {
-  const content = "import base from 'code-kit/prettier/base.js';\nexport default base;\n";
-  writeFileSync(join(cwd, 'prettier.config.js'), content);
-  console.log('Gerado: prettier.config.js');
+  const content = "import base from '@tonybsilva/code-kit/prettier/base.js';\nexport default base;\n";
+  writeFileSync(join(cwd, 'prettier.config.mjs'), content);
+  console.log('Gerado: prettier.config.mjs');
 }
 
 function writeTSConfig(cwd, answers) {
@@ -168,7 +168,7 @@ function writeTSConfig(cwd, answers) {
     compilerOptions.jsx = 'react-jsx';
   }
   const content = JSON.stringify({
-    extends: 'code-kit/typescript/base',
+    extends: '@tonybsilva/code-kit/typescript/base',
     compilerOptions,
   }, null, 2) + '\n';
   writeFileSync(join(cwd, 'tsconfig.json'), content);
@@ -182,9 +182,9 @@ function writeBiomeConfig(cwd) {
 }
 
 function writeStylelintConfig(cwd) {
-  const content = "import stylelintBase from 'code-kit/stylelint/base.js';\nexport default stylelintBase;\n";
-  writeFileSync(join(cwd, 'stylelint.config.js'), content);
-  console.log('Gerado: stylelint.config.js');
+  const content = "import stylelintBase from '@tonybsilva/code-kit/stylelint/base.js';\nexport default stylelintBase;\n";
+  writeFileSync(join(cwd, 'stylelint.config.mjs'), content);
+  console.log('Gerado: stylelint.config.mjs');
 }
 
 async function askSelections() {
